@@ -10,6 +10,9 @@
 
 # production
 /build
+/.next
+
+.eslintcache
 
 # misc
 .DS_Store
