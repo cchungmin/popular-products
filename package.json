@@ -50,6 +50,7 @@
     "jest": "^24.9.0",
     "react-addons-test-utils": "^15.6.2",
     "react-test-renderer": "^16.11.0",
+    "sinon": "^7.5.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.4"
   }
