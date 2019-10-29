@@ -14,11 +14,27 @@ declare global {
   interface Window { Seed: any; }
 }
 
-interface Props {
-  setProducts: Function,
-  vote: Function,
-  products: Array<Object>,
+export interface Product {
+  id: number,
+  title: string,
+  description: string,
+  url: string,
+  votes: number,
+  submitterAvatarUrl: string,
+  productImageUrl: string,
 }
+
+interface Props {
+  setProducts?: Function,
+  vote?: Function,
+  products?: Array<Product>,
+}
+
+export const mapStateToProps = ({ products }: Props) => ({ products });
+export const mapDispatchToProps = (dispatch) => ({
+  setProducts: (data: Array<Product>) => dispatch(setProductsAction(data)),
+  vote: (id: number) => dispatch(voteAction(id)),
+});
 
 class Index extends React.Component<Props> {
   static defaultProps = {
@@ -47,7 +63,7 @@ class Index extends React.Component<Props> {
     console.error('Products not loaded.');
   }
 
-  onProductClick = (id) => () => {
+  onProductClick = (id: number) => () => {
     const { vote } = this.props;
     vote(id);
   }
@@ -75,9 +91,4 @@ class Index extends React.Component<Props> {
   }
 }
 
-export default connect(({ products }: Props) => ({
-  products,
-}), {
-  setProducts: setProductsAction,
-  vote: voteAction,
-})(Index);
+export default connect(mapStateToProps, mapDispatchToProps)(Index);
