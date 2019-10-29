@@ -55,7 +55,6 @@ describe('App', () => {
     wrapper.find('input').simulate('click');
     mapDispatchToProps(dispatch).vote(1);
     wrapper.update();
-    console.log(wrapper.debug());
     expect(wrapper.find('li')).toHaveLength(1);
   });
 
