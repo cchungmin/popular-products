@@ -1,6 +1,7 @@
 /* eslint-env jest */
 
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
+import sinon from 'sinon';
 import React from 'react';
 import { Provider } from 'react-redux';
 import configureStore from '../configureStore';
@@ -38,11 +39,10 @@ describe('With Snapshot Testing', () => {
 })
 
 describe('App', () => {
-  const dispatch = jest.fn();
-  mapDispatchToProps(dispatch).setProducts(data);
+  const onProductClick = sinon.spy();
   const props = {
     data,
-    onProductClick: () => mapDispatchToProps(dispatch).vote,
+    onProductClick,
   };
 
   const wrapper = mount(<Main {...props}/>);
@@ -53,9 +53,8 @@ describe('App', () => {
 
   it('should click the vote button', () => {
     wrapper.find('input').simulate('click');
-    mapDispatchToProps(dispatch).vote(1);
     wrapper.update();
-    expect(wrapper.find('li')).toHaveLength(1);
+    expect(onProductClick).toHaveProperty('callCount', 1);
   });
 
   it('should map the test data to props', () => {
@@ -64,7 +63,8 @@ describe('App', () => {
   });
 
   it('should successfully vote', () => {
+    const dispatch = jest.fn();
     mapDispatchToProps(dispatch).vote(1);
-    expect(dispatch.mock.calls[2]).toEqual([{ type: types.VOTE_SUCCESS, data: 1 }]);
+    expect(dispatch.mock.calls[0][0]).toEqual({ type: types.VOTE_SUCCESS, data: 1 });
   });
 });
